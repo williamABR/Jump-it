@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Jump it Three.js App</title>
+ <style>
+   html, body { margin: 0; padding: 0; overflow: hidden; }
+ </style>
+</head>
+<body>
+ <script src="./js/three.min.js"></script>
+ <script>
+    var scene = new THREE.Scene();
+    var aspect = window.innerWidth / window.innerHeight;
+    var camera = new THREE.PerspectiveCamera( 35, aspect, 0.1, 100 );
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    //Iluminacio
+    var light2 = new THREE.AmbientLight( 0x444444 );
+       scene.add(light2);
+    var light = new THREE.PointLight( 0xb4e7f2, 0.8 );
+       light.position.set(5,15,40);
+       scene.add(light);
+   var light3 = new THREE.PointLight( 0xb4e7f2, 0.8 );
+       light3.position.set(110,15,40);
+       scene.add(light3);
+
+    var loader = new THREE.TextureLoader();
+    var textura = loader.load("./resources/images/ball.jpg");
+    var geometry = new THREE.SphereGeometry( 1, 30, 70 );
+    var material = new THREE.MeshPhongMaterial({
+    color: 0xaaaaaa,
+    specular: 0x333333,
+    shininess: 15,
+    map: textura
+    });
+    var pelota = new THREE.Mesh( geometry, material );
+
+    scene.add( pelota );
+
+    //Piso
+    var loader = new THREE.TextureLoader();
+    var textura = loader.load("./resources/images/wall.jpg");
+    var geometry = new THREE.BoxGeometry( 600, 0.5,4 );
+    var material = new THREE.MeshPhongMaterial({
+    color: 0xaaaaaa,
+    specular: 0x333333,
+    shininess: 15,
+    map: textura
+    });
+    var piso = new THREE.Mesh( geometry, material );
+    scene.add( piso );
+
+    //Pared
+    var loader = new THREE.TextureLoader();
+    var textura = loader.load("./resources/images/wall.jpg");
+    var geometry = new THREE.BoxGeometry( 1, 30, 4);
+    var material = new THREE.MeshPhongMaterial({
+    color: 0xaaaaaa,
+    specular: 0x333333,
+    shininess: 15,
+    map: textura
+    });
+    var pared = new THREE.Mesh( geometry, material );
+    scene.add( pared );
+
+     //Background
+     var backgrounds =[1];
+    for(var j=0; j<620; j=j+80){
+       var loader = new THREE.TextureLoader();
+       var textura = loader.load("./resources/images/wall.jpg");
+       var geometry = new THREE.BoxGeometry( 80, 60, 2);
+       var material = new THREE.MeshPhongMaterial({
+       color: 0xaaaaaa,
+       specular: 0x333333,
+       shininess: 15,
+       map: textura
+       });
+       var background = new THREE.Mesh( geometry, material );
+       scene.add( background );
+       background.position.x = j;
+       background.position.y = 20;
+       //abackground.position.z = 0.1;
+       backgrounds.push(background);
+   }
+    //Ground
+    var grounds =[1];
+    for(var j=0; j<600; j=j+30){
+       var loader = new THREE.TextureLoader();
+       var textura = loader.load("./resources/images/ground.jpg");
+       var geometry = new THREE.BoxGeometry( 30, 30, 2);
+       var material = new THREE.MeshPhongMaterial({
+       color: 0xaaaaaa,
+       specular: 0x333333,
+       shininess: 15,
+       map: textura
+       });
+       var ground = new THREE.Mesh( geometry, material );
+       scene.add( ground );
+       ground.position.x = j;
+       ground.position.y = -15.3;
+       grounds.push(ground);
+   }
+
+   //Boxes
+   var boxes = [1];
+   for(var i=0 ; i<10 ; i++){
+       var loader = new THREE.TextureLoader();
+       var textura = loader.load("./resources/images/lava.jpg");
+       var geometry = new THREE.BoxGeometry( 4, 4, 4);
+       var material = new THREE.MeshPhongMaterial({
+       color: 0xaaaaaa,
+       specular: 0x333333,
+       shininess: 15,
+       map: textura
+       });
+       var box = new THREE.Mesh( geometry, material );
+       scene.add( box );
+       box.position.z = 1;
+       box.position.x = Math.floor(Math.random() * 201)+20;
+       box.position.y = Math.floor(Math.random() * 25)+2; 
+       boxes.push(box);
+   }
+   for(var i=0 ; i<20 ; i++){
+       var loader = new THREE.TextureLoader();
+       var textura = loader.load("./resources/images/lava.jpg");
+       var geometry = new THREE.BoxGeometry( 4, 4, 4);
+       var material = new THREE.MeshPhongMaterial({
+       color: 0xaaaaaa,
+       specular: 0x333333,
+       shininess: 15,
+       map: textura
+       });
+       var box = new THREE.Mesh( geometry, material );
+       scene.add( box );
+       box.position.z = 1;
+       box.position.x = Math.floor(Math.random() * 401)+200;
+       box.position.y = Math.floor(Math.random() * 25)+2; 
+       boxes.push(box);
+   }
+   for(var i=0 ; i<30 ; i++){
+       var loader = new THREE.TextureLoader();
+       var textura = loader.load("./resources/images/lava.jpg");
+       var geometry = new THREE.BoxGeometry( 4, 4, 4);
+       var material = new THREE.MeshPhongMaterial({
+       color: 0xaaaaaa,
+       specular: 0x333333,
+       shininess: 15,
+       map: textura
+       });
+       var box = new THREE.Mesh( geometry, material );
+       scene.add( box );
+       box.position.z = 1;
+       box.position.x = Math.floor(Math.random() * 601)+400;
+       box.position.y = Math.floor(Math.random() * 25)+2; 
+       boxes.push(box);
+   }
+
+  
+    pared.position.x -= 10;
+    pared.position.y +=15;
+    pelota.position.y += 20;
+    pelota.position.z = 2;
+    piso.position.z=0;
+    piso.position.x = 300;
+    pelota.position.x = 5;
+    camera.position.x = pelota.position.x + 40;
+    camera.position.y = 15;
+    camera.position.z = 100;
+
+
+    var velocidad = new THREE.Vector3(0.2,0,0);
+    var aceleracion = new THREE.Vector3(0,-0.01,0);
+    //Raycaster pelota
+    var raycasterAbajo = new THREE.Raycaster();
+    var raycasterAtras = new THREE.Raycaster();
+    var raycasterFrente = new THREE.Raycaster();
+    var raycasterArriba = new THREE.Raycaster();
+
+
+    //Eventos por Teclado
+    document.addEventListener("keydown",keyD);
+    function keyD(event){
+        if(event.keyCode==65){
+            velocidad.x = -0.15;
+        }else{
+          if(event.keyCode==68){
+            velocidad.x = 0.15;
+          }else{
+            if(event.keyCode == 87){
+              pelota.position.y +=0.3;
+              pelota.position.x +=0.15;
+            }else{
+            if(event.keyCode == 83){
+              pelota.position.y -=0.3;
+              pelota.position.x +=0.15;
+              //velocidad.y -= aceleracion.y*2;
+            }
+          }
+        }
+      }
+        if(pelota.position.y >= 30){
+          pelota.position.y = 30;
+        }
+        if(pelota.position.y <= 1){
+          pelota.position.y = 1;
+        }
+
+    }
+    var score = 0;
+      var loader = new THREE.TextureLoader();
+       var textura = loader.load("./resources/images/bala.jpg");
+       var geometry = new THREE.SphereGeometry( 2, 30, 70 );
+       var material = new THREE.MeshPhongMaterial({
+       color: 0xaaaaaa,
+       specular: 0x333333,
+       shininess: 15,
+       map: textura
+       });
+       var pelota1 = new THREE.Mesh( geometry, material );
+       scene.add( pelota1 );
+       pelota1.position.x = 600;
+       pelota1.position.y = Math.floor(Math.random() * 23)+2;
+    var canon =[pelota1];
+
+    var render = function () {
+      requestAnimationFrame( render );
+      if(score%60==0){
+       var loader = new THREE.TextureLoader();
+       var textura = loader.load("./resources/images/bala.jpg");
+       var geometry = new THREE.SphereGeometry( 2, 30, 70 );
+       var material = new THREE.MeshPhongMaterial({
+       color: 0xaaaaaa,
+       specular: 0x333333,
+       shininess: 15,
+       map: textura
+       });
+       var pelota2 = new THREE.Mesh( geometry, material );
+       scene.add( pelota2 );
+       pelota2.position.x = pelota.position.x + 400;
+       pelota2.position.y = Math.floor(Math.random() * 23)+2;
+       pelota2.position.Z = pelota.position.z;
+       canon.push(pelota2);
+      }
+     
+       for(var i=0;i<canon.length;i++){
+         canon[i].position.x -= 0.3;
+         canon[i].position.z = pelota.position.z;
+       }
+        pelota.position.x += velocidad.x;
+        velocidad.y += aceleracion.y;
+        pelota.position.y += velocidad.y;
+
+        //raycasterAbajo
+        raycasterAbajo.set(pelota.position, new THREE.Vector3(0,-1,0));
+        var intersect = raycasterAbajo.intersectObjects(scene.children, true);
+        if(intersect.length>0){
+            if(intersect[0].distance<=1){
+              velocidad.y *= -1;
+              pelota.position.y += 0.2;
+            }
+        }
+        //raycasterAtras
+        raycasterAtras.set(pelota.position, new THREE.Vector3(-1,0,0));
+        var intersect1 = raycasterAtras.intersectObjects(scene.children, true);
+        if(intersect1.length>0){
+            if(intersect1[0].distance<=0.5){
+               velocidad.x *=-1;
+               pelota.position.y = 15;
+               pelota.position.x = 8;
+               camera.position.x = 40;
+               pared.position.x = -5;
+               for(var i=0;i<canon.length;i++){
+                    canon[i].position.x = pelota.position.x + 400;
+                    canon[i].position.z = pelota.position.z;
+                }
+               alert("Sigue Intentando, Tu puntaje es: "+score);
+               
+               score = 0;
+            }
+        }
+        //raycasterFrente
+        raycasterFrente.set(pelota.position, new THREE.Vector3(1,0,0));
+        var intersect = raycasterFrente.intersectObjects(scene.children, true);
+        if(intersect.length>0){
+            if(intersect[0].distance<=0.5){
+               pelota.position.y = 15;
+               pelota.position.x = 8;
+               camera.position.x = 50;
+               pared.position.x = -5;
+               for(var i=0;i<canon.length;i++){
+                    canon[i].position.x -= pelota.position.x + 400;
+                    canon[i].position.z = pelota.position.z;
+                }
+               alert("Sigue Intentando, Tu puntaje es: "+score);
+               score = 0;
+            }
+        }
+        //raycasterArriba
+        raycasterArriba.set(pelota.position, new THREE.Vector3(0,1,0));
+        var intersect1 = raycasterArriba.intersectObjects(scene.children, true);
+        if(intersect1.length>0){
+            if(intersect1[0].distance<=1){
+              velocidad.y *= -1;
+              pelota.position.y -= 0.1;
+            }
+        }
+        camera.position.x += 0.1;
+        light.position.x = pelota.position.x - 40;
+        light3.position.x = pelota.position.x + 40;
+        pared.position.x += 0.1;
+        score++;
+      renderer.render( scene, camera );
+    };
+    render();
+ </script>
+</body>
+</html>
